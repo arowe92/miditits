@@ -12,7 +12,17 @@ use crate::app_state::*;
 use crate::display::create_display;
 use crate::store::Store;
 
+use midi;
+
 fn main() {
+    // Midi run blocks main thread. its UI component can be brought out of lib.rs
+    // or this glu code can go in there.
+    {
+        match midi::run() {
+            Ok(_) => (),
+            Err(err) => println!("Error: {}", err)
+        }
+    }
     let event_loop = glutin::event_loop::EventLoop::with_user_event();
     let display = create_display(&event_loop);
 
